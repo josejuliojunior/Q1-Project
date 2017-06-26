@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Trail Finder</title>
+
+    <!-- UIkit CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.25/css/uikit.min.css" />
+
+<link rel="stylesheet" href="/Users/jose/workspace/playground/Q1-Project/main.css">
+
+
+  </head>
+  <body>
+    <nav class="uk-navbar-container uk-margin" uk-navbar>
+    <div class="uk-navbar-left">
+
+        <a class="uk-navbar-item uk-logo" href="#">Trail Finder</a>
+
+        <!-- <ul class="uk-navbar-nav">
+            <li>
+                <a href="#">
+                    <span class="uk-icon uk-margin-small-right" uk-icon="icon: star"></span>
+                    Features
+                </a>
+            </li>
+        </ul> -->
+
+        <div class="uk-navbar-item">
+            <div>Select the city:
+              <!-- <a href="#">Link</a> -->
+            </div>
+        </div>
+
+
+
+        <div class="uk-navbar-item">
+            <form action="javascript:void(0)">
+                <input id="selectInput" class="uk-input uk-form-width-small" type="text" placeholder="Input">
+                <button id="buttonSelect" class="uk-button uk-button-default">Subimit</button>
+            </form>
+        </div>
+    </div>
+    </nav>
+
+    <button id="loadapi" type="button" name="button">Test</button>
+
+    <ul class="uk-list uk-list-bullet">
+    <li>List item 1</li>
+    <li>List item 2</li>
+    <li>List item 3</li>
+    </ul>
+
+        <h3>Map</h3>
+        <div id="map" class="map"></div>
+        <!-- <script> initMap() </script> -->
+
+
+    <!-- jQuery is required -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- UIkit JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.25/js/uikit.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.25/js/uikit-icons.min.js"></script>
+    <script type="text/javascript" src="./app.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBZcxNp892pyo5KJDrm0q-kcnBsdjJSRe8&callback">
+    </script>
+  </body>
+</html>
