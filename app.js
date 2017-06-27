@@ -1,21 +1,33 @@
 var map;
-var uluru = {lat: 35.636579, lng: -98.495316};
+var mapCenter = {lat: 35.636579, lng: -98.495316};
 var mapOptions =  {
             zoom:4 ,
-            center:uluru,
+            center:mapCenter,
             // mapTypeId:google.maps.MapTypeId.ROADMAP
         };
 
+function makeUL(array) {
+    var list = document.createElement('ul');
+    for(var i = 0; i < array.length; i++) {
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array[i]));
+        list.appendChild(item);
+    }
+    return list;
+}
+
+
+
 $(document).ready(function(){
 
-  // var uluru = {lat: 35.636579, lng: -98.495316};
+  // var mapCenter = {lat: 35.636579, lng: -98.495316};
   map = new google.maps.Map(document.getElementById('map'), mapOptions)
   // {
     // zoom: 4,
-    // center: uluru
+    // center: mapCenter
   // });
   // var marker = new google.maps.Marker({
-  //   position: uluru,
+  //   position: mapCenter,
   //   map: map
   // });
 
@@ -50,7 +62,11 @@ var images = [];
       codeAPI = response;
       console.log(response);
 
+      // document.getElementById('resultList').appendChild(makeUL(codeAPI.places[i].name));
+
       for (var i = 0; i < codeAPI.places.length; i++) {
+
+        document.getElementById('resultList').appendChild(makeUL(codeAPI.places[i].name));
 
         myLatLng[i] = {lat: codeAPI.places[i].lat, lng: codeAPI.places[i].lon};
 
@@ -76,9 +92,9 @@ var images = [];
 
       // map = new google.maps.Map(document.getElementById('map'), mapOptions);
       map.setZoom(9);
-      uluru.lat = codeAPI.places[0].lat;
-      uluru.lng = codeAPI.places[0].lon;
-      map.setCenter(uluru);
+      mapCenter.lat = codeAPI.places[0].lat;
+      mapCenter.lng = codeAPI.places[0].lon;
+      map.setCenter(mapCenter);
 
       google.maps.event.addListener(markers[i], 'click', function() {
         console.log(this.index); // this will give correct index
@@ -88,7 +104,7 @@ var images = [];
       });
 
 
-
+//Test
 
     }
 
