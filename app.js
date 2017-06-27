@@ -1,3 +1,4 @@
+
 var map;
 var mapCenter = {lat: 35.636579, lng: -98.495316};
 var mapOptions =  {
@@ -6,17 +7,20 @@ var mapOptions =  {
             // mapTypeId:google.maps.MapTypeId.ROADMAP
         };
 
-function makeUL(array) {
-    var list = document.createElement('ul');
-    for(var i = 0; i < array.length; i++) {
-        var item = document.createElement('li');
-        item.appendChild(document.createTextNode(array[i]));
-        list.appendChild(item);
-    }
-    return list;
+// function makeUL(array) {
+//     var list = document.createElement('ul');
+//     var item = document.createElement('li');
+//     item.appendChild(document.createTextNode(array));
+//     list.appendChild(item);
+//     item.setAttribute('id', 'trail');
+//     return list;
+// }//function make list
+
+function makeTitle(title) {
+  var titleResult = document.createElement('h4');
+  titleResult.appendChild(document.createTextNode(title));
+  return titleResult;
 }
-
-
 
 $(document).ready(function(){
 
@@ -51,20 +55,32 @@ $(document).ready(function(){
       }
     };
 
-var codeAPI = "";
-var markers = [];
-var contents = [];
-var myLatLng = [];
-var infowindows = [];
-var images = [];
+    var codeAPI = "";
+    var markers = [];
+    var contents = [];
+    var myLatLng = [];
+    var infowindows = [];
+    var images = [];
 
     $.ajax(settings).done(function (response) {
       codeAPI = response;
       console.log(response);
 
-      // document.getElementById('resultList').appendChild(makeUL(codeAPI.places[i].name));
+      document.getElementById('resultListTitle').appendChild(makeTitle('Trails found:'));
 
       for (var i = 0; i < codeAPI.places.length; i++) {
+
+        function makeUL(array) {
+            var list = document.createElement('ul');
+            var a = document.createElement('a');
+            var item = document.createElement('li');
+            item.appendChild(document.createTextNode(array));
+            a.appendChild(item);
+            list.appendChild(a);
+            item.setAttribute('id', 'trail'+[i]);
+            a.setAttribute('href', '#');
+            return list;
+        }//function make list
 
         document.getElementById('resultList').appendChild(makeUL(codeAPI.places[i].name));
 
@@ -73,11 +89,11 @@ var images = [];
         markers[i] = new google.maps.Marker({
           position: myLatLng[i],
           map: map,
-          title: codeAPI.places[i].name
-        });
+          title: 'trail'+[i]
+        });//markers
 
         images[i] = '<img src='+codeAPI.places[i].activities[0].thumbnail+' height="340" width="340">';
-        markers[i].index = i; //add index property
+        markers[i].index = i;
         contents[i] = '<div class="popup_container">'+'<b>Name: </b>'+codeAPI.places[i].name+'<br>'+'<br>'+
                       '<b>Length: </b>'+codeAPI.places[i].activities[0].length+' miles<br>'+
                       '<b>Description: </b>'+'<br>'+codeAPI.places[i].activities[0].description+'<br>'+'<br>'+
@@ -86,32 +102,37 @@ var images = [];
 
 
         infowindows[i] = new google.maps.InfoWindow({
-        content: contents[i],
-        maxWidth: 400
-        });
+          content: contents[i],
+          maxWidth: 400
+        });//new info on map
 
-      // map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      map.setZoom(9);
-      mapCenter.lat = codeAPI.places[0].lat;
-      mapCenter.lng = codeAPI.places[0].lon;
-      map.setCenter(mapCenter);
+        function markerFunction(id){
+          for (var i in markers){
+            var markerID = markers[i].options.title;
+            if (markerID == id){
+                markers[i].openPopup();
+            };
+          }
+        }
 
-      google.maps.event.addListener(markers[i], 'click', function() {
-        console.log(this.index); // this will give correct index
-        console.log(i); //this will always give 10 for you
-        infowindows[this.index].open(map,markers[this.index]);
-        map.panTo(markers[this.index].getPosition());
-      });
+        markerFunction($(this)[i].id)
 
+        map.setZoom(9);
+        mapCenter.lat = codeAPI.places[0].lat;
+        mapCenter.lng = codeAPI.places[0].lon;
+        map.setCenter(mapCenter);
 
-//Test
+        google.maps.event.addListener(markers[i], 'click', function() {
+          console.log(this.index); // this will give correct index
+          console.log(i); //this will always give 10 for you
+          infowindows[this.index].open(map,markers[this.index]);
+          map.panTo(markers[this.index].getPosition());
+        });//function create markers
 
-//more
+      }//for loop to codeAPI places
 
-    }
+    });//ajax function
 
-    });
+  });//button click
 
-  });
-
-});
+});//document ready
