@@ -1,20 +1,11 @@
+
 var map;
 var mapCenter = {lat: 35.636579, lng: -98.495316};
 var mapOptions =  {
             zoom:4 ,
             center:mapCenter,
+            mapTypeId: 'roadmap'
         };
-
-/*
-function makeUL(array) {
-    var list = document.createElement('ul');
-    var item = document.createElement('li');
-    item.appendChild(document.createTextNode(array));
-    list.appendChild(item);
-    item.setAttribute('id', 'trail');
-    return list;
-}//function make list
-*/
 
 function makeTitle(title) {
   var titleResult = document.createElement('h4');
@@ -23,26 +14,31 @@ function makeTitle(title) {
 }
 
 $(document).ready(function(){
+function initialize() {
 
-
-  // var mapCenter = {lat: 35.636579, lng: -98.495316};
-  map = new google.maps.Map(document.getElementById('map'), mapOptions)
-  // {
-    // zoom: 4,
-    // center: mapCenter
-  // });
-  // var marker = new google.maps.Marker({
-  //   position: mapCenter,
-  //   map: map
-  // });
-
-
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
   var city = "";
 
+  $('#terrain').click(function () {
+    map.setMapTypeId('terrain');
+  });
+  $('#hybrid').click(function () {
+    map.setMapTypeId('hybrid');
+  });
+  $('#roadmap').click(function () {
+    map.setMapTypeId('roadmap');
+  });
+  $('#satellite').click(function () {
+    map.setMapTypeId('satellite');
+  });
+
+
   $('#buttonSelect').click(function () {
+    $('#resultListTitle').empty();
+    $('#resultList').empty();
+    $('.modals').empty();
     city = $('#selectInput').val();
-    // console.log(city);
 
     var settings = {
       "async": true,
@@ -62,7 +58,8 @@ $(document).ready(function(){
     var myLatLng = [];
     var infowindows = [];
     var images = [];
-    var gmarkers ;
+    var allMarkers = [];
+    var uikModalFull = [];
 
     $.ajax(settings).done(function (response) {
       codeAPI = response;
@@ -81,8 +78,8 @@ $(document).ready(function(){
             list.appendChild(a);
             item.setAttribute('id', 'trail'+[i]);
             a.setAttribute('id', 'trail'+[i]);
-            // a.setAttribute('onclick', 'myClick'+[i]);
-            // a.setAttribute('href', "javascript:google.maps.event.trigger(gmarkers["+[i]+"],'click');");
+            a.setAttribute('uk-toggle', '');
+            a.setAttribute('href', "#modal-" + i);
             return list;
         }//function make list
 
@@ -104,6 +101,35 @@ $(document).ready(function(){
                       '<b>Directions: </b>'+'<br>'+codeAPI.places[i].directions+'<br>'+
                       images[i]+'</div>';
 
+        // uikModalFull[i] =   '<a class="uk-button uk-button-default" href="#modal-full" uk-toggle>Open</a>'+
+        //                     '<div id="modal-full" class="uk-modal-full" uk-modal>'+
+        //                         '<div class="uk-modal-dialog">'+
+        //                             '<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>'+
+        //                             '<div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>'+
+        //                                 '<div class="uk-background-cover" style="background-image: url(' + images[i] + ');" uk-height-viewport></div>'+
+        //                                 '<div class="uk-padding-large">'+
+        //                                     '<h1>' + codeAPI.places[i].name + '</h1>'+
+        //                                     '<p>' + codeAPI.places[i].activities[0].description + '</p>'+
+        //                                     '<p>' + codeAPI.places[i].directions + '</p>'+
+        //                                 '</div>'+
+        //                             '</div>'+
+        //                         '</div>'+
+        //                     '</div>';
+
+        $('.modals').append(
+                            '<div id="modal-' + i + '" class="uk-modal-full" uk-modal>'+
+                                '<div class="uk-modal-dialog">'+
+                                    '<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>'+
+                                    '<div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>'+
+                                        '<div class="uk-background-cover" style="background-image: url(' + images[i] + ');" uk-height-viewport></div>'+
+                                        '<div class="uk-padding-large">'+
+                                            '<h1>' + codeAPI.places[i].name + '</h1>'+
+                                            '<p>' + codeAPI.places[i].activities[0].description + '</p>'+
+                                            '<p>' + codeAPI.places[i].directions + '</p>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>');
 
         infowindows[i] = new google.maps.InfoWindow({
           content: contents[i],
@@ -111,40 +137,11 @@ $(document).ready(function(){
         });//new info on map
 
 
-/*
-        // function markerFunction(id){
-        //   for (var i in markers){
-        //     var markerID = markers[i].options.title;
-        //     if (markerID == id){
-        //         google.maps.event.addListener(markers[i],'click', function() {
-        //           infowindow.open(map, marker[i]);
-        //           console.log(this.index); // this will give correct index
-        //           console.log(i); //this will always give 10 for you
-        //           infowindows[this.index].open(map,markers[this.index]);
-        //           map.panTo(markers[this.index].getPosition());
-        //         });//listener
-        //     }//if
-        //   }//for loop in marker
-        // }//function markerFunction
-        //
-        // $("a").click(function(){
-        // markerFunction($(this)[i].id);
-        // });
-*/
 
         map.setZoom(9);
         mapCenter.lat = codeAPI.places[0].lat;
         mapCenter.lng = codeAPI.places[0].lon;
         map.setCenter(mapCenter);
-
-/*
-        google.maps.event.addListener(markers[i], 'click', function() {
-          console.log(this.index); // this will give correct index
-          console.log(i); //this will always give 10 for you
-          infowindows[this.index].open(map,markers[this.index]);
-          map.panTo(markers[this.index].getPosition());
-        });//function create markers
-*/
 
         function newMarkers () {
           console.log(this.index); // this will give correct index
@@ -153,31 +150,29 @@ $(document).ready(function(){
           map.panTo(markers[this.index].getPosition());
         };//function create markers
 
-        google.maps.event.addListener(markers[i], 'click', newMarkers);
-/*
-        function markerFunction(id){
-          for (var i in markers){
-            var markerID = markers[i].title;
-            if (markerID == id){
-                infowindows[this.index].open(map,markers[this.index]);
-            }//if
-          }//for loop in marker
-        }//function markerFunction
+        // google.maps.event.addListener(markers[i], 'click', newMarkers);
 
-        $("a").click(function(){
-          console.log($(this.id));
-        markerFunction($(this).id);
+        google.maps.event.addListener(markers[i], 'click', function() {
+          console.log(this.index);
+          var index = this.index;
+          UIkit.modal('#modal-' + index).show();
+          // console.log('.modals'[this.index]);
+          // $('.modals'[this.index]).modal('show');
         });
-*/
-
-
 
 
 
       }//for loop to codeAPI places
 
+      allMarkers.push(markers);
+      console.log(allMarkers);
+
     });//ajax function
 
   });//button click
+
+}//initialize
+
+google.maps.event.addDomListener(window, 'load', initialize);
 
 });//document ready
