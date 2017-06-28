@@ -1,20 +1,20 @@
-
 var map;
 var mapCenter = {lat: 35.636579, lng: -98.495316};
 var mapOptions =  {
             zoom:4 ,
             center:mapCenter,
-            // mapTypeId:google.maps.MapTypeId.ROADMAP
         };
 
-// function makeUL(array) {
-//     var list = document.createElement('ul');
-//     var item = document.createElement('li');
-//     item.appendChild(document.createTextNode(array));
-//     list.appendChild(item);
-//     item.setAttribute('id', 'trail');
-//     return list;
-// }//function make list
+/*
+function makeUL(array) {
+    var list = document.createElement('ul');
+    var item = document.createElement('li');
+    item.appendChild(document.createTextNode(array));
+    list.appendChild(item);
+    item.setAttribute('id', 'trail');
+    return list;
+}//function make list
+*/
 
 function makeTitle(title) {
   var titleResult = document.createElement('h4');
@@ -23,6 +23,7 @@ function makeTitle(title) {
 }
 
 $(document).ready(function(){
+
 
   // var mapCenter = {lat: 35.636579, lng: -98.495316};
   map = new google.maps.Map(document.getElementById('map'), mapOptions)
@@ -61,6 +62,7 @@ $(document).ready(function(){
     var myLatLng = [];
     var infowindows = [];
     var images = [];
+    var gmarkers ;
 
     $.ajax(settings).done(function (response) {
       codeAPI = response;
@@ -78,7 +80,9 @@ $(document).ready(function(){
             a.appendChild(item);
             list.appendChild(a);
             item.setAttribute('id', 'trail'+[i]);
-            a.setAttribute('href', '#');
+            a.setAttribute('id', 'trail'+[i]);
+            // a.setAttribute('onclick', 'myClick'+[i]);
+            // a.setAttribute('href', "javascript:google.maps.event.trigger(gmarkers["+[i]+"],'click');");
             return list;
         }//function make list
 
@@ -106,28 +110,69 @@ $(document).ready(function(){
           maxWidth: 400
         });//new info on map
 
-        function markerFunction(id){
-          for (var i in markers){
-            var markerID = markers[i].options.title;
-            if (markerID == id){
-                markers[i].openPopup();
-            };
-          }
-        }
 
-        markerFunction($(this)[i].id)
+/*
+        // function markerFunction(id){
+        //   for (var i in markers){
+        //     var markerID = markers[i].options.title;
+        //     if (markerID == id){
+        //         google.maps.event.addListener(markers[i],'click', function() {
+        //           infowindow.open(map, marker[i]);
+        //           console.log(this.index); // this will give correct index
+        //           console.log(i); //this will always give 10 for you
+        //           infowindows[this.index].open(map,markers[this.index]);
+        //           map.panTo(markers[this.index].getPosition());
+        //         });//listener
+        //     }//if
+        //   }//for loop in marker
+        // }//function markerFunction
+        //
+        // $("a").click(function(){
+        // markerFunction($(this)[i].id);
+        // });
+*/
 
         map.setZoom(9);
         mapCenter.lat = codeAPI.places[0].lat;
         mapCenter.lng = codeAPI.places[0].lon;
         map.setCenter(mapCenter);
 
+/*
         google.maps.event.addListener(markers[i], 'click', function() {
           console.log(this.index); // this will give correct index
           console.log(i); //this will always give 10 for you
           infowindows[this.index].open(map,markers[this.index]);
           map.panTo(markers[this.index].getPosition());
         });//function create markers
+*/
+
+        function newMarkers () {
+          console.log(this.index); // this will give correct index
+          console.log(i); //this will always give 10 for you
+          infowindows[this.index].open(map,markers[this.index]);
+          map.panTo(markers[this.index].getPosition());
+        };//function create markers
+
+        google.maps.event.addListener(markers[i], 'click', newMarkers);
+/*
+        function markerFunction(id){
+          for (var i in markers){
+            var markerID = markers[i].title;
+            if (markerID == id){
+                infowindows[this.index].open(map,markers[this.index]);
+            }//if
+          }//for loop in marker
+        }//function markerFunction
+
+        $("a").click(function(){
+          console.log($(this.id));
+        markerFunction($(this).id);
+        });
+*/
+
+
+
+
 
       }//for loop to codeAPI places
 
