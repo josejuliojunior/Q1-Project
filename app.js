@@ -143,12 +143,12 @@ function initialize() {
         mapCenter.lng = codeAPI.places[0].lon;
         map.setCenter(mapCenter);
 
-        function newMarkers () {
-          console.log(this.index); // this will give correct index
-          console.log(i); //this will always give 10 for you
-          infowindows[this.index].open(map,markers[this.index]);
-          map.panTo(markers[this.index].getPosition());
-        };//function create markers
+        // function newMarkers () {
+        //   console.log(this.index); // this will give correct index
+        //   console.log(i); //this will always give 10 for you
+        //   infowindows[this.index].open(map,markers[this.index]);
+        //   map.panTo(markers[this.index].getPosition());
+        // };//function create markers
 
         // google.maps.event.addListener(markers[i], 'click', newMarkers);
 
