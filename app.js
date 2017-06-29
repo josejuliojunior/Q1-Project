@@ -49,8 +49,8 @@ function initialize() {
         "x-mashape-key": "M5BD7Ke1jqmshM8HrPJBBeX85Svdp18mX1djsnMU5qML3ekWTj",
         "cache-control": "no-cache",
         "postman-token": "2a73aedd-4c25-24bb-9a9b-ee56e8d5ed7b"
-      }
-    };
+      }//end headers
+    };//end settings
 
     var codeAPI = "";
     var markers = [];
@@ -60,15 +60,41 @@ function initialize() {
     var images = [];
     var allMarkers = [];
     var uikModalFull = [];
+    var errorImage = $('.errorImage');
+    var loading = $('.loading');
 
     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var labelIndex = 0;
+
+    function displayError(){
+    errorImage.removeClass('hide');
+    }
+
+    function displayLoading (){
+    loading.removeClass('hide');
+    }
+
+    function hideError() {
+    errorImage.addClass('hide');
+    }
+
+    function hideLoading() {
+    loading.addClass('hide');
+    }
+
 
     $.ajax(settings).done(function (response) {
       codeAPI = response;
       console.log(response);
 
-      document.getElementById('resultListTitle').appendChild(makeTitle('Trails found:'));
+      hideError()
+      if (codeAPI.places.length === 0) {
+        document.getElementById('resultListTitle').appendChild(makeTitle('Sorry! No results! Try another city'));
+        displayError()
+      } else {
+        displayLoading()
+        document.getElementById('resultListTitle').appendChild(makeTitle('Trails found:'));
+
 
       for (var i = 0; i < codeAPI.places.length; i++) {
 
@@ -85,6 +111,8 @@ function initialize() {
             a.setAttribute('href', "#modal-" + i);
             return list;
         }//end function make list
+
+        hideLoading()
 
         document.getElementById('resultList').appendChild(makeUL(/*labels[labelIndex++ % labels.length]+': '+*/codeAPI.places[i].name));
 
@@ -197,6 +225,8 @@ function initialize() {
 
 
       }// end for loop to codeAPI places
+
+}
 
     });//end ajax function
 
