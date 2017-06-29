@@ -4,7 +4,7 @@ var mapCenter = {lat: 35.636579, lng: -98.495316};
 var mapOptions =  {
             zoom:4 ,
             center:mapCenter,
-            mapTypeId: 'roadmap'
+            mapTypeId: 'terrain'
         };
 
 function makeTitle(title) {
@@ -61,6 +61,9 @@ function initialize() {
     var allMarkers = [];
     var uikModalFull = [];
 
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var labelIndex = 0;
+
     $.ajax(settings).done(function (response) {
       codeAPI = response;
       console.log(response);
@@ -76,45 +79,68 @@ function initialize() {
             item.appendChild(document.createTextNode(array));
             a.appendChild(item);
             list.appendChild(a);
-            item.setAttribute('id', 'trail'+[i]);
-            a.setAttribute('id', 'trail'+[i]);
+            // item.setAttribute('id', 'trail'+[i]);
+            // a.setAttribute('id', 'trail'+[i]);
             a.setAttribute('uk-toggle', '');
             a.setAttribute('href', "#modal-" + i);
             return list;
-        }//function make list
+        }//end function make list
 
-        document.getElementById('resultList').appendChild(makeUL(codeAPI.places[i].name));
+        document.getElementById('resultList').appendChild(makeUL(/*labels[labelIndex++ % labels.length]+': '+*/codeAPI.places[i].name));
 
         myLatLng[i] = {lat: codeAPI.places[i].lat, lng: codeAPI.places[i].lon};
 
         markers[i] = new google.maps.Marker({
           position: myLatLng[i],
           map: map,
-          title: 'trail'+[i]
-        });//markers
+          // label: labels[labelIndex++ % labels.length],
+          title: codeAPI.places[i].name,
 
-        images[i] = '<img src='+codeAPI.places[i].activities[0].thumbnail+' height="340" width="340">';
+          // label: {
+          //         color: 'black',
+          //         // fontWeight: 'bold',
+          //         text: codeAPI.places[i].name,
+          //       },
+          // icon: {
+          //         labelOrigin: new google.maps.Point(11, 50),
+          //         url: 'http://maps.google.com/mapfiles/marker.png',
+          //         size: new google.maps.Size(22, 40),
+          //         origin: new google.maps.Point(0, 0),
+          //         anchor: new google.maps.Point(11, 40),
+          //       },
+
+        });// end markers
+
+        map.addListener('maptypeid_changed', function () {
+          var typeToColor, type, color, k, label;
+
+          typeToColor = {
+            'terrain': 'black',
+            'roadmap': 'black',
+            'hybrid': 'white',
+            'satellite': 'white',
+          };
+
+          type = map.getMapTypeId();
+          color = typeToColor[type];
+
+          for (k in markers) {
+            if (markers.hasOwnProperty(k)) {
+              label = markers[k].getLabel();
+              label.color = color;
+              markers[k].setLabel(label);
+            }
+          }
+        });
+
+
+        images[i] = codeAPI.places[i].activities[0].thumbnail;// height="340" width="340>';
         markers[i].index = i;
-        contents[i] = '<div class="popup_container">'+'<b>Name: </b>'+codeAPI.places[i].name+'<br>'+'<br>'+
-                      '<b>Length: </b>'+codeAPI.places[i].activities[0].length+' miles<br>'+
-                      '<b>Description: </b>'+'<br>'+codeAPI.places[i].activities[0].description+'<br>'+'<br>'+
-                      '<b>Directions: </b>'+'<br>'+codeAPI.places[i].directions+'<br>'+
-                      images[i]+'</div>';
-
-        // uikModalFull[i] =   '<a class="uk-button uk-button-default" href="#modal-full" uk-toggle>Open</a>'+
-        //                     '<div id="modal-full" class="uk-modal-full" uk-modal>'+
-        //                         '<div class="uk-modal-dialog">'+
-        //                             '<button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>'+
-        //                             '<div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>'+
-        //                                 '<div class="uk-background-cover" style="background-image: url(' + images[i] + ');" uk-height-viewport></div>'+
-        //                                 '<div class="uk-padding-large">'+
-        //                                     '<h1>' + codeAPI.places[i].name + '</h1>'+
-        //                                     '<p>' + codeAPI.places[i].activities[0].description + '</p>'+
-        //                                     '<p>' + codeAPI.places[i].directions + '</p>'+
-        //                                 '</div>'+
-        //                             '</div>'+
-        //                         '</div>'+
-        //                     '</div>';
+        // contents[i] = '<div class="popup_container">'+'<b>Name: </b>'+codeAPI.places[i].name+'<br>'+'<br>'+
+        //               '<b>Length: </b>'+codeAPI.places[i].activities[0].length+' miles<br>'+
+        //               '<b>Description: </b>'+'<br>'+codeAPI.places[i].activities[0].description+'<br>'+'<br>'+
+        //               '<b>Directions: </b>'+'<br>'+codeAPI.places[i].directions+'<br>'+
+        //               images[i]+'</div>';
 
         $('.modals').append(
                             '<div id="modal-' + i + '" class="uk-modal-full" uk-modal>'+
@@ -124,18 +150,26 @@ function initialize() {
                                         '<div class="uk-background-cover" style="background-image: url(' + images[i] + ');" uk-height-viewport></div>'+
                                         '<div class="uk-padding-large">'+
                                             '<h1>' + codeAPI.places[i].name + '</h1>'+
-                                            '<p>' + codeAPI.places[i].activities[0].description + '</p>'+
-                                            '<p>' + codeAPI.places[i].directions + '</p>'+
+                                            '<p><b>Length: </b>' + codeAPI.places[i].activities[0].length + ' miles.</p>'+
+                                            '<p><b>Description</b><br>'+ codeAPI.places[i].activities[0].description + '</p>'+
+                                            '<p><b>Directions</b><br>' + codeAPI.places[i].directions + '</p>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>');
 
         infowindows[i] = new google.maps.InfoWindow({
-          content: contents[i],
+          content: codeAPI.places[i].name,
           maxWidth: 400
-        });//new info on map
+        });//end new info on map
 
+
+      //   setTimeout(function, 1000){
+      //   map.setZoom(11);
+      //   mapCenter.lat = codeAPI.places[i].lat;
+      //   mapCenter.lng = codeAPI.places[i].lon;
+      //   map.setCenter(mapCenter);
+      // };
 
 
         map.setZoom(9);
@@ -158,21 +192,18 @@ function initialize() {
           UIkit.modal('#modal-' + index).show();
           // console.log('.modals'[this.index]);
           // $('.modals'[this.index]).modal('show');
-        });
+        });//end event listener markes
 
 
 
-      }//for loop to codeAPI places
+      }// end for loop to codeAPI places
 
-      allMarkers.push(markers);
-      console.log(allMarkers);
+    });//end ajax function
 
-    });//ajax function
+  });//end button click
 
-  });//button click
-
-}//initialize
+}//end initialize
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-});//document ready
+});//end document ready

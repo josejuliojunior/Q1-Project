@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "q1-project-a78bb"
+    "default": "q1-project-a78bb",
+    "test": "q1-project-a78bb"
   }
 }
