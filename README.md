@@ -37,7 +37,7 @@ Information and photos for tens of thousands of outdoor recreation locations inc
 #### Google Maps API
 Solutions provide comprehensive, scenario-oriented guidance that addresses common business problems. Solutions feature fully working example applications with code that you can integrate into your own projects.
 **Link:** https://developers.google.com/maps/
-![alt text](https://png.icons8.com/google-maps/color/1600)
+![alt text](https://www.gstatic.com/images/branding/product/1x/maps_64dp.png)
 
 ### Technologies:
 ![alt text](https://pixels4kids.files.wordpress.com/2014/11/html_css_javascript_and_the_awesome_jquery_infographic_header.png?w=1200)
