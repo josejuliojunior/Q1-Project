@@ -9,10 +9,9 @@ From this need, I developed a site where you only have to enter a city in the US
 After searching the user has the possibility to choose a trail and see information about it, such as size, description, direction and a photo of the place.
 Another feature is that the user is able to choose the types of the map he wants to see, such as Roadmap, Satellite, Hybrid, Terrain.
 
-```
+
 ## Give the example
 
-```
 
 ### Initial page:
 ![alt text](https://github.com/josejuliojunior/Q1-Project/blob/master/Initial-Page.png)
@@ -24,7 +23,6 @@ Another feature is that the user is able to choose the types of the map he wants
 ![alt text](https://github.com/josejuliojunior/Q1-Project/blob/master/Trail-Information.png)
 
 
-```
 ### Technologies:
 ![alt text](https://pixels4kids.files.wordpress.com/2014/11/html_css_javascript_and_the_awesome_jquery_infographic_header.png?w=1200)
 
