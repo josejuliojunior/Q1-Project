@@ -10,7 +10,7 @@ After searching the user has the possibility to choose a trail and see informati
 Another feature is that the user is able to choose the types of the map he wants to see, such as Roadmap, Satellite, Hybrid, Terrain.
 
 
-## Give the example
+## Print screen examples
 
 
 ### Initial page:
