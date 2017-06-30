@@ -14,6 +14,10 @@ Another feature is that the user is able to choose the types of the map he wants
 https://q1-project-a78bb.firebaseapp.com/
 
 
+## Video demonstration
+
+https://www.youtube.com/watch?v=OKy2GJMFPB8
+
 
 ## Print screen examples
 
