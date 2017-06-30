@@ -27,17 +27,23 @@ https://q1-project-a78bb.firebaseapp.com/
 ### Trail informations:
 ![alt text](https://github.com/josejuliojunior/Q1-Project/blob/master/Trail-Information.png)
 
+
+
 ### API's:
 
 #### Trail API
 Information and photos for tens of thousands of outdoor recreation locations including hiking and mountain biking trails, campgrounds, ski resorts, ATV trails, and more.
 **Link:** https://market.mashape.com/trailapi/trailapi
+
 ![alt text](https://s3.amazonaws.com/mashape-production-logos/apis/53aa3bcfe4b0a705fcc30dc5_medium)
+
 
 #### Google Maps API
 Solutions provide comprehensive, scenario-oriented guidance that addresses common business problems. Solutions feature fully working example applications with code that you can integrate into your own projects.
 **Link:** https://developers.google.com/maps/
+
 ![alt text](https://www.gstatic.com/images/branding/product/1x/maps_64dp.png)
+
 
 ### Technologies:
 ![alt text](https://pixels4kids.files.wordpress.com/2014/11/html_css_javascript_and_the_awesome_jquery_infographic_header.png?w=1200)
