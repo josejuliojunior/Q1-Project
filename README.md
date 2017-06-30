@@ -47,4 +47,4 @@ Solutions provide comprehensive, scenario-oriented guidance that addresses commo
 
 ### Technologies:
 ![alt text](https://pixels4kids.files.wordpress.com/2014/11/html_css_javascript_and_the_awesome_jquery_infographic_header.png?w=1200)
-
+![alt text](http://public2.bemyapp.com/media/wp-content/uploads/2014/07/uikit-logo.png)
